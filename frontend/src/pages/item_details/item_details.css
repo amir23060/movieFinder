@@ -1,0 +1,413 @@
+/* item_details.css */
+
+.detail-container {
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Backdrop section */
+.highlight {
+  width: 100%;
+  position: relative;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.highlight img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Gradient overlay at bottom of backdrop */
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to top, #0f0f23, rgba(15, 15, 35, 0));
+  pointer-events: none;
+}
+
+/* Item section: poster + info */
+.item {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  align-items: flex-start;
+  margin-top: -100px;
+  position: relative;
+  z-index: 2;
+  padding: 0 40px;
+}
+
+/* Poster styling */
+.item > img {
+  width: 280px;
+  aspect-ratio: 2 / 3;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Information section */
+.information {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.information h2 {
+  font-size: 48px;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.overview {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #d0d0d0;
+  margin: 0;
+  max-width: 600px;
+}
+
+/* Info grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-item .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-item .value {
+  font-size: 16px;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+/* Button group */
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.trailer-btn,
+.add-btn {
+  padding: 14px 32px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.trailer-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  flex: 1;
+  max-width: 200px;
+}
+
+.trailer-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+}
+
+.trailer-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.add-btn {
+  background: rgba(102, 126, 234, 0.15);
+  color: #667eea;
+  border: 2px solid #667eea;
+  flex: 1;
+  max-width: 200px;
+}
+
+.add-btn:hover {
+  background: rgba(102, 126, 234, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+}
+
+/* Similar section */
+.similar {
+  margin-top: 60px;
+  padding: 0 40px;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 1000px;
+  aspect-ratio: 16 / 9;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: -45px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 32px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 10;
+}
+
+.modal-close:hover {
+  color: #667eea;
+}
+
+.video-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.video-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .item {
+    gap: 35px;
+    padding: 0 30px;
+  }
+
+  .item > img {
+    width: 240px;
+  }
+
+  .information h2 {
+    font-size: 40px;
+  }
+
+  .similar {
+    padding: 0 30px;
+  }
+}
+
+@media (max-width: 992px) {
+  .highlight img {
+    height: 350px;
+  }
+
+  .item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 0;
+    padding: 30px 20px;
+    gap: 30px;
+  }
+
+  .item > img {
+    width: 220px;
+  }
+
+  .information {
+    align-items: center;
+  }
+
+  .overview {
+    max-width: 100%;
+  }
+
+  .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+  }
+
+  .button-group {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .trailer-btn,
+  .add-btn {
+    max-width: 100%;
+  }
+
+  .similar {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .highlight img {
+    height: 250px;
+  }
+
+  .item {
+    padding: 20px 16px;
+  }
+
+  .item > img {
+    width: 180px;
+  }
+
+  .information h2 {
+    font-size: 32px;
+  }
+
+  .overview {
+    font-size: 14px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+
+  .modal-close {
+    top: -40px;
+    font-size: 28px;
+  }
+
+  .similar {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .highlight img {
+    height: 200px;
+  }
+
+  .item {
+    padding: 16px 12px;
+    gap: 20px;
+  }
+
+  .item > img {
+    width: 140px;
+  }
+
+  .information h2 {
+    font-size: 24px;
+  }
+
+  .overview {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .trailer-btn,
+  .add-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+    max-width: 100%;
+  }
+
+  .modal-content {
+    width: 98%;
+  }
+
+  .modal-close {
+    top: -35px;
+    font-size: 24px;
+  }
+
+  .similar {
+    padding: 0 12px;
+  }
+}

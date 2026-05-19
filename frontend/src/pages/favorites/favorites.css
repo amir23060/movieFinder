@@ -1,0 +1,124 @@
+.favorites-page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a0f2e 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.favorites-content {
+  padding: 40px 30px;
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.favorites-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.favorites-header h1 {
+  color: #fff;
+  font-size: 36px;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.favorites-count {
+  background: rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(102, 126, 234, 0.4);
+  color: #667eea;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.empty-favorites {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 20px;
+  text-align: center;
+}
+
+.empty-favorites h1 {
+  font-size: 48px;
+  margin: 0;
+  color: #fff;
+}
+
+.empty-favorites p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-size: 18px;
+}
+
+.empty-favorites .empty-message {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 10px;
+}
+
+.explore-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.explore-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.loading {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  padding: 40px;
+}
+
+@media (max-width: 768px) {
+  .favorites-content {
+    padding: 20px 15px;
+  }
+
+  .favorites-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .favorites-header h1 {
+    font-size: 24px;
+  }
+
+  .empty-favorites {
+    min-height: 50vh;
+  }
+
+  .empty-favorites h1 {
+    font-size: 36px;
+  }
+
+  .empty-favorites p {
+    font-size: 16px;
+  }
+}

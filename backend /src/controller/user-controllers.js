@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -17,8 +17,7 @@ const register = async (req, res) => {
 
 
     const user = new User({
-      firstName,
-      lastName,
+      name,
       email,
       password: hashedPassword,
     });
@@ -117,6 +116,34 @@ const watch_list=async(req,res)=>{
   }
 
 }
+const favorites=async(req,res)=>{
+const {userId} = req.params
+const {id, title, poster,media_type}=req.body
+const item = {id,title,poster,media_type}
+ const user = await User.findById(userId)
+ const existingItem = user.favorites.find(e=>e.id === id)
+ if(existingItem){
+ return res.status(400).json({message:"Item is already added to favorites"})
+ }
+ user.favorites.push(item)
+ await user.save()
+ res.status(200).json({message:`${title} is added to favorites` })
+
+
+
+}
+const removeFromfavorites=async(req,res)=>{
+    const {userId} = req.params
+    const {id}=req.body
+     const user = await User.findById(userId)
+     const existingItem = user.favorites.find(e=>e.id === id)
+     if(!existingItem){
+     return res.status(400).json({message:"Item is not in favorites"})
+     }
+     user.favorites.pull(existingItem)
+     await user.save()
+     res.status(200).json({message:`Item is removed from favorites` })
+}
    
 
-module.exports = { register, login,likedMovies,getUser,watch_list};
+module.exports = { register,removeFromfavorites, login,likedMovies,getUser,watch_list,favorites};
