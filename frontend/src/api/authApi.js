@@ -76,7 +76,7 @@ export const authApi = {
 
  
 }
-export const addToFavorites =async({userId,id,title,media_type,poster,setMessage})=>{
+export const addToFavorites =async(userId,{id,title,media_type,poster})=>{
     try{
         console.log(userId)
         const item = {id,title,media_type,poster}
@@ -88,10 +88,10 @@ export const addToFavorites =async({userId,id,title,media_type,poster,setMessage
         })
         const data = await res.json()
         if(res.ok){
-            setMessage(data.message)
+            return data.message
         }
         else{
-            return setMessage(data.message)
+            return data.message
         }
 
 
@@ -100,7 +100,7 @@ export const addToFavorites =async({userId,id,title,media_type,poster,setMessage
         console.log(error)
     }
 }
-export const allFavorites=async({userId})=>{
+export const getAllFavorites=async(userId)=>{
 try{
     const res = await fetch(`${API_BASE_URL}/${userId}`, {
         method: 'GET',
@@ -120,7 +120,7 @@ try{
         console.log(error)
     }
 }
-export const removeFromfavorites=async({userId,id})=>{
+export const removeFromfavorites=async(userId,id)=>{
 try{
     const res = await fetch(`${API_BASE_URL}/favorites/remove/${userId}`, {
         method: 'PATCH',

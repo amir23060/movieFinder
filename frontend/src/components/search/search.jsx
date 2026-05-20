@@ -1,40 +1,22 @@
-import { useEffect, useState } from "react"
-import { multiSearch } from "../../../api/movieApi"
-import { Search_modal } from "../serach_modal/search_modal"
+import { useSearch } from "../../Context/searchContext"
 import "./search.css"
-function Search({ userId,query,setQuery,results,setResults }) {
 
-
- useEffect(() => {
-
-  if (!query ||!query.trim()) {
-
-    setResults([])
-
-    return
-
-  }
-
-  multiSearch(query).then((res) => {
-
-    setResults(res || [])
-
-  })
-
-}, [query])
+function Search() {
+  const {
+    query,
+    setQuery
+  } = useSearch()
 
   return (
-    <>
-      
-
-      <input
+    <input
       className="input"
-        value={query}
-        type="text"
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search movies or series..."
-      />
-    </>
+      value={query}
+      type="text"
+      onChange={(e) =>
+        setQuery(e.target.value)
+      }
+      placeholder="Search movies or series..."
+    />
   )
 }
 

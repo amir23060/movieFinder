@@ -3,128 +3,120 @@ import {
   getMovieDetails,
   getMovieVideos
 } from "../../api/movieApi"
-import "./item_modal.css"
 import {
   getSerieDetails,
   getSerieVideos
 } from "../../api/seriesApi"
 
 import "./item_modal.css"
-import { addToFavorites, allFavorites, removeFromfavorites } from "../../api/authApi"
 
-function Item_modal({ userId,itemId, media_type, setItemId }) {
+import { useAuth } from "../../Context/AuthContext"
+import { useFavorite } from "../../Context/favoriteContext"
+import { useModal } from "../../Context/modalContext"
+
+
+function Item_modal() {
   const [item, setItem] = useState(null)
-  const [trailerKey, setTrailerKey] = useState(null)
-  const [showTrailer, setShowTrailer] = useState(false)
-  const [favorite,setFavorite]=useState(false)
-  const [message,setMessage]= useState("")
-  const [allFavorite,setAllFavorites]=useState([])
-console.log(userId)
-const loadFavorites = async () => {
+  const [trailerKey, setTrailerKey] =
+    useState(null)
+  const [showTrailer, setShowTrailer] =
+    useState(false)
+  const [favorite, setFavorite] =
+    useState(false)
 
-  if (!userId) return
+  const { user } = useAuth()
 
-  const data = await allFavorites({ userId })
+  const {
+    itemId,
+    mediaType,
+    closeModal
+  } = useModal()
 
-  setAllFavorites(data)
-
-}
-useEffect(()=>{
-   loadFavorites()
-},[userId,itemId])
-useEffect(() => {
-
-  const favoriteItem = allFavorite.some(
-
-    (e) => e.id === itemId
-
-  )
-
-  setFavorite(favoriteItem)
-
-}, [itemId, allFavorite])
+  const {
+    addToFavorite,
+    removeFavorite,
+    allFavorites
+  } = useFavorite()
 
   useEffect(() => {
     if (!itemId) return
 
-    if (media_type === "movie") {
-      getMovieDetails(itemId).then(setItem)
+    const favoriteItem =
+      allFavorites.some(
+        (e) => e.id === itemId
+      )
 
-      getMovieVideos(itemId).then((data) => {
-        const trailer = data.results?.find(
-          (v) => v.type === "Trailer" && v.site === "YouTube"
-        )
+    setFavorite(favoriteItem)
+  }, [itemId, allFavorites])
 
-        if (trailer) {
-          setTrailerKey(trailer.key)
-        }
-      })
+  useEffect(() => {
+    if (!itemId) return
+
+    if (mediaType === "movie") {
+      getMovieDetails(itemId)
+        .then(setItem)
+
+      getMovieVideos(itemId)
+        .then((data) => {
+          const trailer =
+            data.results?.find(
+              (v) =>
+                v.type ===
+                  "Trailer" &&
+                v.site ===
+                  "YouTube"
+            )
+
+          setTrailerKey(
+            trailer?.key || null
+          )
+        })
     } else {
-      getSerieDetails(itemId).then(setItem)
+      getSerieDetails(itemId)
+        .then(setItem)
 
-      getSerieVideos(itemId).then((data) => {
-        const trailer = data.results?.find(
-          (v) => v.type === "Trailer" && v.site === "YouTube"
-        )
+      getSerieVideos(itemId)
+        .then((data) => {
+          const trailer =
+            data.results?.find(
+              (v) =>
+                v.type ===
+                  "Trailer" &&
+                v.site ===
+                  "YouTube"
+            )
 
-        if (trailer) {
-          setTrailerKey(trailer.key)
-        }
-      })
+          setTrailerKey(
+            trailer?.key || null
+          )
+        })
     }
-  }, [itemId, media_type])
-
-  const closeModal = () => {
-    setItemId(null)
-  }
+  }, [itemId, mediaType])
 
   const handleTrailerClick = () => {
     if (trailerKey) {
       setShowTrailer(true)
     }
   }
- const addToFavorite = async ({
-  id,
-  title,
-  media_type,
-  poster
-}) => {
-  try {
-    await addToFavorites({
-      userId,
-      id,
-      title,
-      media_type,
-      poster,
-      setMessage
-    })
 
-    await loadFavorites()
-  } catch (err) {
-    console.log(err)
-  }
-}
-const removeFavorite = async () => {
-  try {
-    await removeFromfavorites({
-      userId,
-      id: itemId
-    })
-
-    await loadFavorites()
-  } catch (err) {
-    console.log(err)
-  }
-}
+  if (!itemId) return null
 
   return (
     <>
-      <div className="item-modal-overlay" onClick={closeModal}>
+      <div
+        className="item-modal-overlay"
+        onClick={closeModal}
+      >
         <div
           className="item-modal-content"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) =>
+            e.stopPropagation()
+          }
         >
-          <button className="modal-close" onClick={closeModal}>
+          <button
+            className="modal-close"
+            onClick={closeModal}
+          >
             ✕
           </button>
 
@@ -145,7 +137,10 @@ const removeFavorite = async () => {
                 />
 
                 <div className="modal-text">
-                  <h2>{item.title || item.name}</h2>
+                  <h2>
+                    {item.title ||
+                      item.name}
+                  </h2>
 
                   <p className="overview">
                     {item.overview}
@@ -153,24 +148,39 @@ const removeFavorite = async () => {
 
                   <div className="info-grid">
                     <div className="info-item">
-                      <span className="label">Genre:</span>
+                      <span className="label">
+                        Genre:
+                      </span>
+
                       <span className="value">
                         {item.genres
-                          ?.map((g) => g.name)
+                          ?.map(
+                            (g) =>
+                              g.name
+                          )
                           .join(", ")}
                       </span>
                     </div>
 
                     <div className="info-item">
-                      <span className="label">Rating:</span>
+                      <span className="label">
+                        Rating:
+                      </span>
+
                       <span className="value">
-                        {item.vote_average?.toFixed(1)}/10
+                        {item.vote_average?.toFixed(
+                          1
+                        )}
+                        /10
                       </span>
                     </div>
 
                     {item.runtime && (
                       <div className="info-item">
-                        <span className="label">Runtime:</span>
+                        <span className="label">
+                          Runtime:
+                        </span>
+
                         <span className="value">
                           {item.runtime}m
                         </span>
@@ -178,7 +188,10 @@ const removeFavorite = async () => {
                     )}
 
                     <div className="info-item">
-                      <span className="label">Release:</span>
+                      <span className="label">
+                        Release:
+                      </span>
+
                       <span className="value">
                         {new Date(
                           item.release_date ||
@@ -191,32 +204,38 @@ const removeFavorite = async () => {
                   <div className="button-group">
                     <button
                       className="trailer-btn"
-                      onClick={handleTrailerClick}
-                      disabled={!trailerKey}
+                      onClick={
+                        handleTrailerClick
+                      }
+                      disabled={
+                        !trailerKey
+                      }
                     >
                       ▶ Trailer
                     </button>
 
-                    <button  className="add-btn" onClick={() =>
-
-  favorite
-
-    ? removeFavorite()
-
-    : addToFavorite({
-
-        media_type,
-
-        id: item.id,
-
-        title: item.name || item.title,
-
-        poster: item.poster_path
-
-      })
-
-}>
-                      {favorite?"Remove from favorites":"+ Add to List"}
+                    <button
+                      className="add-btn"
+                      onClick={() =>
+                        favorite
+                          ? removeFavorite(
+                              item.id
+                            )
+                          : addToFavorite({
+                              media_type:
+                                mediaType,
+                              id: item.id,
+                              title:
+                                item.name ||
+                                item.title,
+                              poster:
+                                item.poster_path
+                            })
+                      }
+                    >
+                      {favorite
+                        ? "Remove from favorites"
+                        : "+ Add to List"}
                     </button>
                   </div>
                 </div>
@@ -226,34 +245,45 @@ const removeFavorite = async () => {
         </div>
       </div>
 
-      {showTrailer && trailerKey && (
-        <div
-          className="modal-overlay"
-          onClick={() => setShowTrailer(false)}
-        >
+      {showTrailer &&
+        trailerKey && (
           <div
-            className="modal-content"
-            onClick={(e) => e.stopPropagation()}
+            className="modal-overlay"
+            onClick={() =>
+              setShowTrailer(
+                false
+              )
+            }
           >
-            <button
-              className="modal-close"
-              onClick={() => setShowTrailer(false)}
+            <div
+              className="modal-content"
+              onClick={(e) =>
+                e.stopPropagation()
+              }
             >
-              ✕
-            </button>
+              <button
+                className="modal-close"
+                onClick={() =>
+                  setShowTrailer(
+                    false
+                  )
+                }
+              >
+                ✕
+              </button>
 
-            <div className="video-container">
-              <iframe
-                src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
-                title="Trailer"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              <div className="video-container">
+                <iframe
+                  src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
+                  title="Trailer"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
     </>
   )
 }
