@@ -6,27 +6,14 @@ import dayTrendingMovies, { getTopRatedMovies, weekTrendingMovies } from '../../
 import { getTopRatedSeries, weekTrendingSeries } from '../../../api/seriesApi'
 import { Navbar } from '../../components/navbar/navbar'
 import { Search_modal } from '../../components/serach_modal/search_modal'
+import { useSelector } from 'react-redux'
+import { Item_modal } from '../../components/item_modal/item_modal'
 
 
-export const Home = ({setUserId}) => {
-  const { userId } = useParams()
+export const Home = () => {
   const navigate = useNavigate()
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  useEffect(() => {
+  const {user,loading}=useSelector(state => state.auth)
 
-    setUserId(userId)
-
-  }, [userId])
-
-  useEffect(() => {
-    // Get user from localStorage
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
-    }
-    setLoading(false)
-  }, [userId])
 
   
 
@@ -41,11 +28,12 @@ export const Home = ({setUserId}) => {
             
       
       <div className="home-content">
-       <ItemGrid name={"Trending movies"} api={weekTrendingMovies} userId={userId} media_type={"movie"}/>
-       <ItemGrid name={"Top rated movies"} api={getTopRatedMovies} userId={userId} media_type={"movie"}/>
-       <ItemGrid name={"Trending series"} api={weekTrendingSeries} userId={userId} media_type={"tv"}/>
-       <ItemGrid name={"Top rated series"} api={getTopRatedSeries} userId={userId} media_type={"tv"}/>
+       <ItemGrid name={"Trending movies"} api={weekTrendingMovies} media_type={"movie"}/>
+       <ItemGrid name={"Top rated movies"} api={getTopRatedMovies}  media_type={"movie"}/>
+       <ItemGrid name={"Trending series"} api={weekTrendingSeries} media_type={"tv"}/>
+       <ItemGrid name={"Top rated series"} api={getTopRatedSeries}  media_type={"tv"}/>
       </div>
+      
     </div>
     </>
   

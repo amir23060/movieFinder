@@ -30,7 +30,6 @@ function Item(){
                 <ItemGrid 
                     name={media_type === "movie" ? "All Movies" : "All Series"} 
                     api={media_type === "movie" ? () => getMovies(page) : () => getSeries(page)} 
-                    userId={userId} 
                     media_type={media_type}
                 />
                 <div className="pagination">

@@ -16,7 +16,7 @@
   width: 92%;
   max-width: 1150px;
   max-height: 90vh;
-  overflow-y: auto;
+   overflow: visible;
   background: #111827;
   border-radius: 20px;
   position: relative;
@@ -195,20 +195,30 @@
 /* trailer popup */
 
 .modal-overlay {
+
   position: fixed;
+
   inset: 0;
+
   background: rgba(0,0,0,.95);
+
   display: flex;
+
   justify-content: center;
+
   align-items: center;
-  z-index: 3000;
+
+  z-index: 999999;
+
 }
 
 .modal-content {
   width: 90%;
   max-width: 1000px;
   aspect-ratio: 16/9;
-  position: relative;
+ position: relative;
+
+  z-index: 1000000;
 }
 
 .video-container {
