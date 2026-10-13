@@ -76,29 +76,60 @@ export const authApi = {
 
  
 }
-export const addToFavorites =async({userId,id,title,media_type,poster,setMessage})=>{
-    try{
-        console.log(userId)
-        const item = {id,title,media_type,poster}
-        const res = await fetch(`${API_BASE_URL}/favorites/${userId}`,{
-            method:"PATCH",
-            headers: {
-          'Content-Type': 'application/json',
-        },body:JSON.stringify(item)
-        })
-        const data = await res.json()
-        if(res.ok){
-            setMessage(data.message)
-        }
-        else{
-            return setMessage(data.message)
-        }
+export const addToFavorites = async ({
+  userId,
+  id,
+  title,
+  media_type,
+  poster
+}) => {
+  try {
 
+    const item = {
+      id,
+      title,
+      media_type,
+      poster
+    }
 
+    console.log(
+      "ADD REQUEST",
+      userId,
+      item
+    )
+
+    const res = await fetch(
+      `${API_BASE_URL}/favorites/${userId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify(item)
+      }
+    )
+
+    const data =
+      await res.json()
+
+    console.log(
+      "ADD RESPONSE",
+      data
+    )
+
+    if (!res.ok) {
+      throw new Error(
+        data.message
+      )
     }
-    catch(error){
-        console.log(error)
-    }
+
+    return data.message
+
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
 }
 export const allFavorites=async({userId})=>{
 try{

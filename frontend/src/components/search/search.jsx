@@ -1,40 +1,46 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { multiSearch } from "../../../api/movieApi"
-import { Search_modal } from "../serach_modal/search_modal"
+import { useDispatch, useSelector } from "react-redux"
+import {
+  setQuery,
+  setResults,
+  setLoading
+} from "../../features/search/searchSlice"
 import "./search.css"
-function Search({ userId,query,setQuery,results,setResults }) {
 
+function Search() {
+  const dispatch = useDispatch()
 
- useEffect(() => {
+  const { query } = useSelector(
+    state => state.search
+  )
 
-  if (!query ||!query.trim()) {
+  useEffect(() => {
+    if (!query?.trim()) {
+      dispatch(setResults([]))
+      return
+    }
 
-    setResults([])
+    dispatch(setLoading(true))
 
-    return
-
-  }
-
-  multiSearch(query).then((res) => {
-
-    setResults(res || [])
-
-  })
-
-}, [query])
+    multiSearch(query)
+      .then(res => {
+        dispatch(setResults(res || []))
+      })
+      .finally(() => {
+        dispatch(setLoading(false))
+      })
+  }, [query, dispatch])
 
   return (
-    <>
-      
-
-      <input
+    <input
       className="input"
-        value={query}
-        type="text"
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search movies or series..."
-      />
-    </>
+      value={query}
+      onChange={(e) =>
+        dispatch(setQuery(e.target.value))
+      }
+      placeholder="Search movies or series..."
+    />
   )
 }
 

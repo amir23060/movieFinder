@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import './signUp.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUser } from '../../../features/auth/authSlice'
 
 export const Signup = () => {
   const [formData, setFormData] = useState({
@@ -10,8 +12,9 @@ export const Signup = () => {
     password: '',
     confirmPassword: ''
   })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const {loading,error}=useSelector(state=>state.auth)
+  const dispatch = useDispatch()
+  const [localError, setLocalError] = useState('')
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -20,7 +23,7 @@ export const Signup = () => {
       ...prevState,
       [name]: value
     }))
-    setError('')
+    setLocalError('')
   }
 
   const handleSubmit = async (e) => {
@@ -46,41 +49,9 @@ export const Signup = () => {
       setError('Passwords do not match')
       return
     }
-
-    setLoading(true)
-
-    try {
-      // API call to backend register endpoint
-      const response = await fetch('http://localhost:8000/api', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-          password: formData.password
-        })
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        setError(data.message || 'Signup failed')
-        setLoading(false)
-        return
-      }
-
-      // Store user data
-      localStorage.setItem('user', JSON.stringify(data.user))
-
-      // Navigate to home
-      navigate(`/home/${data.user._id}`)
-    } catch (err) {
-      setError(err.message || 'Something went wrong')
-      console.error('Signup error:', err)
-    } finally {
-      setLoading(false)
+    const result = await dispatch(registerUser(formData))
+    if(registerUser.fulfilled.match(result)){
+      navigate(`/home}`)
     }
   }
 
@@ -160,7 +131,7 @@ export const Signup = () => {
             />
           </div>
 
-          {error && <div className="error-message">{error}</div>}
+          {error || localError && <div className="error-message">{error || localError}</div>}
 
           <button type="submit" className="signup-btn" disabled={loading}>
             {loading ? 'Creating Account...' : 'Create Account'}

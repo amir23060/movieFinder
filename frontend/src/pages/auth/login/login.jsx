@@ -1,15 +1,19 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import './login.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUser } from '../../../features/auth/authSlice'
 
 export const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+
+  const [localError, setLocalError] = useState('')
+  const dispatch =useDispatch()
   const navigate = useNavigate()
+  const {loading,user,error}=useSelector(state=>state.auth)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -17,7 +21,7 @@ export const Login = () => {
       ...prevState,
       [name]: value
     }))
-    setError('')
+    setLocalError('')
   }
 
   const handleSubmit = async (e) => {
@@ -25,45 +29,17 @@ export const Login = () => {
     
     // Validation
     if (!formData.email || !formData.password) {
-      setError('Please fill in all fields')
+      setLocalError('Please fill in all fields')
       return
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setError('Please enter a valid email')
+      setLocalError('Please enter a valid email')
       return
     }
-
-    setLoading(true)
-    
-    try {
-      // API call to backend login endpoint
-      const response = await fetch('http://localhost:8000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        setError(data.message || 'Login failed')
-        setLoading(false)
-        return
-      }
-
-      // Store user data
-      localStorage.setItem('user', JSON.stringify(data.user))
-
-      // Navigate to home
-      navigate(`/home/${data.user._id}`)
-    } catch (err) {
-      setError(err.message || 'Something went wrong')
-      console.error('Login error:', err)
-    } finally {
-      setLoading(false)
+    const result = await dispatch(loginUser(formData))
+    if(loginUser.fulfilled.match(result)){
+      navigate(`/home`)
     }
   }
 
@@ -102,7 +78,7 @@ export const Login = () => {
             />
           </div>
 
-          {error && <div className="error-message">{error}</div>}
+          {error || localError && <div className="error-message">{error || localError}</div>}
 
           <button type="submit" className="login-btn" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign In'}

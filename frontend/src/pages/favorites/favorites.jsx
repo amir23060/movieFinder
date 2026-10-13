@@ -1,26 +1,12 @@
-import { useEffect, useState } from "react"
-import { allFavorites } from "../../api/authApi"
 import { ItemGrid } from "../../components/item_grid/item_grid"
-import { useParams, useNavigate } from "react-router-dom"
-import { Navbar } from "../../components/navbar/navbar"
+import {  useNavigate } from "react-router-dom"
 import "./favorites.css"
+import { useSelector } from "react-redux"
 
 function Favorites(){
-    const { id } = useParams()
+    const {user}=useSelector(state=>state.auth)
     const navigate = useNavigate()
-    const [favorites, setFavorites] = useState([])
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        setLoading(true)
-        allFavorites({ userId: id }).then((data) => {
-            setFavorites(data || [])
-            setLoading(false)
-        }).catch(() => {
-            setFavorites([])
-            setLoading(false)
-        })
-    }, [id])
+    const {items,loading}=useSelector(state=>state.favorites)
 
     if (loading) {
         return (
@@ -33,7 +19,7 @@ function Favorites(){
         )
     }
 
-    if (!favorites || favorites.length === 0) {
+    if (!items || items.length === 0) {
         return (
             <div className="favorites-page-container">
                 <div className="favorites-content">
@@ -42,7 +28,7 @@ function Favorites(){
                         <h1>❤️ Favorites</h1>
                         <p>No favorites yet</p>
                         <p className="empty-message">Start adding movies and series to your favorites!</p>
-                        <button className="explore-btn" onClick={() => navigate(`/home/${id}`)}>
+                        <button className="explore-btn" onClick={() => navigate(`/home/${user?._id}`)}>
                             Explore Now
                         </button>
                     </div>
@@ -55,9 +41,8 @@ function Favorites(){
         <div className="favorites-page-container">
             <div className="favorites-content">
                 <ItemGrid 
-                    api={() => Promise.resolve(favorites)} 
+                    api={() => Promise.resolve(items)} 
                     name={"My Favorites"} 
-                    userId={id}
                     media_type={null}
                 />
             </div>
