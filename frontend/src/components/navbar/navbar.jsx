@@ -4,6 +4,7 @@ import { Search } from "../search/search"
 import { logOut } from "../../features/auth/authSlice"
 import { useDispatch, useSelector } from "react-redux"
 function Navbar({query,setQuery,results,setResults}) {
+    const {items}=useSelector(state=>state.favorites)
     const navigate= useNavigate()
     const dispatch = useDispatch()
     const user = useSelector(state => state.auth.user)
@@ -21,7 +22,7 @@ function Navbar({query,setQuery,results,setResults}) {
         </div>
         <Search userId={userId} query={query} setQuery={setQuery} results={results} setResults={setResults} />
         <div className="nav-buttons">
-            <button className="favorite" onClick={()=>navigate(`/favorites`)}>Favorites</button>
+                       <div className="favorited"> {items.length>0? <span className="counter">{items.length}</span>:""} <button className="favorite" onClick={()=>navigate(`/favorites`)}> Favorites</button></div>
             <button className="logout" onClick={handleLogout}>Log out</button>
         </div>
     </div>

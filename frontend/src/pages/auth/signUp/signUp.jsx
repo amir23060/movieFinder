@@ -51,7 +51,7 @@ export const Signup = () => {
     }
     const result = await dispatch(registerUser(formData))
     if(registerUser.fulfilled.match(result)){
-      navigate(`/home/${result.payload._id}`)
+      navigate(`/home}`)
     }
   }
 

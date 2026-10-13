@@ -115,7 +115,7 @@ function Item_modal() {
                     >
                       {favorite
                         ? "Remove from favorites"
-                        : "+ Add to List"}
+                        : "+ Add to favorites"}
                     </button>
                   </div>
                 </div>

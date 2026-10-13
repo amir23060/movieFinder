@@ -46,7 +46,7 @@ const { results, isOpen } = useSelector(
     <Routes>
       <Route path='/' element={<Login />} />
       <Route path='/signup' element={<Signup />} />
-      <Route path='/home' element={<Home  />} />
+      <Route path='/home' element={<Home/>} />
       <Route path='/all/:userId/:media_type' element={<Item/>}/>
       <Route path='/favorites' element={<Favorites/>}/>
     </Routes></>
